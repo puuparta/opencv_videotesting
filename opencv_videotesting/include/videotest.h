@@ -19,12 +19,15 @@ public:
 	CV_WRAP void pause(void);
 	CV_WRAP bool open(const std::string& filename);
     CV_WRAP bool open(int device);
-	CV_WRAP void createvideorec(const std::string& filename);
-	CV_WRAP void createvideorec(const std::string& filename, int fps);
-	CV_WRAP void createvideorec(const std::string& filename, int fps, char c1, char c2, char c3, char c4);
+	CV_WRAP bool createvideorec(const std::string& filename, bool ask);
+	CV_WRAP bool createvideorec(const std::string& filename, int fps, bool ask);
+	CV_WRAP bool createvideorec(const std::string& filename, int fps, char c1, char c2, char c3, char c4, bool ask);
 	CV_WRAP cv::VideoCapture Player();
 	CV_WRAP cv::VideoWriter Recorder();
 	CV_WRAP void writeframe(const cv::Mat &frame);
+
+	virtual VideoTest& operator >> (cv::Mat& image);
+	virtual VideoTest& operator << (const cv::Mat& image);
 
 	cv::Mat currentframe();
 	

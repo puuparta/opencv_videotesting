@@ -53,7 +53,7 @@ CV_WRAP bool VideoTest::open(const std::string& name)
 /**
  * Create video recorder with output filename, fps and fourcc.
  */
-CV_WRAP void VideoTest::createvideorec(const std::string& filename,int fps, char c1, char c2, char c3, char c4)
+CV_WRAP bool VideoTest::createvideorec(const std::string& filename,int fps, char c1, char c2, char c3, char c4, bool ask)
 {
 	#if CV_VERSION_MAJOR == 3
 		int fcc = cv::VideoWriter::fourcc(c1,c2,c3,c4);
@@ -65,26 +65,30 @@ CV_WRAP void VideoTest::createvideorec(const std::string& filename,int fps, char
 		int propFrameHeight = CV_CAP_PROP_FRAME_HEIGHT;
 	#endif
 	
+	if(ask)
+		fcc=-1;
+
 	cv::Size frameSize(this->player.get(propFrameWidth), this->player.get(propFrameHeight));
-	this->writer.open(filename,fcc,fps,frameSize,true);
+	return this->writer.open(filename,fcc,fps,frameSize,true);
 }
 
 /**
  * Create video recorder with output filename, fps.
  * Default fourcc is DIV3.
  */
-CV_WRAP void VideoTest::createvideorec(const std::string& filename, int fps)
+CV_WRAP bool VideoTest::createvideorec(const std::string& filename, int fps, bool ask)
 {
-	this->createvideorec(filename, fps, 'D','I','V','3');
+	return this->createvideorec(filename, fps, 'D','I','V','3', ask);
 }
 
 /**
  * Create video recorder with output filename.
- * Default fps is 20 and fourcc is DIV3.
+ * Default fps taken from source stream, default fourcc is DIV3.
  */
-CV_WRAP void VideoTest::createvideorec(const std::string& filename)
+CV_WRAP bool VideoTest::createvideorec(const std::string& filename, bool ask)
 {
-	this->createvideorec(filename, 20);
+	int fps = 20; //this->player.get(cv::CAP_PROP_FPS);
+	return this->createvideorec(filename, fps, ask);
 }
 
 /**
@@ -128,4 +132,17 @@ cv::Mat VideoTest::currentframe()
 CV_WRAP void VideoTest::writeframe(const cv::Mat &frame)
 {
 	this->writer.write(frame);
+}
+
+
+VideoTest& VideoTest::operator >> (cv::Mat& image)
+{
+	this->player.read(image);
+    return *this;
+}
+
+VideoTest& VideoTest::operator << (const cv::Mat& image)
+{
+	this->writer.write(image);
+    return *this;
 }
