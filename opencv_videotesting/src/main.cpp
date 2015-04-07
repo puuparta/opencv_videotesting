@@ -23,6 +23,7 @@
 #include "videotest.h"
 #include "filters.h"
 #include "tracking.h"
+#include "lines.h"
 
 int main() {
 	
@@ -51,16 +52,21 @@ int main() {
 		video >> frame;
 		video >> frame2;
 
+		// uncomment to test
 		// movement tracking test
-		tracking::seekMovement(frame, frame2, true);
-
+		//tracking::seekMovement(frame, frame2, true);
+		
+		// uncomment to test
 		// color channel filter test  
-		filtered = filters::binaryFilterRedChannel(frame);
+		//filtered = filters::binaryFilterRedChannel(frame);
+		//cv::imshow("filtered",filtered);
+		
+		// detect lines with Hough transform
+		lines::detectLines(frame);
 		cv::imshow("original",frame);
-		cv::imshow("filtered",filtered);
 		
 		// save frame to write stream if createvideorec is set
-		video << filtered;
+		video << frame;
 
 		switch(cv::waitKey(33)) {
 		case 27:

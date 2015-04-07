@@ -84,6 +84,8 @@
     <ClCompile Include="src\videotest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\2dfeatures.h" />
+    <ClInclude Include="include\lines.h" />
     <ClInclude Include="include\tracking.h" />
     <ClInclude Include="include\filters.h" />
     <ClInclude Include="include\videotest.h" />
